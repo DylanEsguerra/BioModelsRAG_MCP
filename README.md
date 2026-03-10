@@ -54,8 +54,8 @@ mcp_server.py  (FastMCP)
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/AntimonyRAG_Agent.git
-cd AntimonyRAG_Agent
+git clone https://github.com/DylanEsguerra/BioModelsRAG_MCP.git
+cd BioModelsRAG_MCP
 python3 -m venv venv
 venv/bin/pip install -r requirements.txt
 ```
@@ -122,10 +122,7 @@ https://www.ebi.ac.uk/biomodels/model/download/{model_id}?filename={model_id}_ur
 
 | File | Purpose |
 |---|---|
-| `mcp_server.py` | The MCP server — the primary deliverable |
-| `requirements.txt` | Minimal dependencies for the MCP server (`mcp`, `tellurium`, `requests`) |
-| `test_mcp.py` | Quick install verification script |
+| `mcp_server.py` | The MCP server — the only file that runs |
+| `requirements.txt` | Dependencies: `mcp`, `tellurium`, `requests` |
+| `test_mcp.py` | Install verification — run this after `pip install` |
 | `requirements-full-pipeline.txt` | Dependencies for the original BioModelsRAG pipeline (reference only) |
-| `simulate_BIOMD0000000054.py` | Example Tellurium simulation (erythrocyte adenylate model) |
-| `simulate_BIOMD0000000064.py` | Example Tellurium simulation (yeast glycolysis, Teusink 2000) |
-| `BioModelsRAG/` | Original pipeline code (reference only, not used by MCP) |
