@@ -70,39 +70,17 @@ Both tools should return results. If this fails, fix it before proceeding.
 
 ### 3. Register with Claude Code
 
-**There are two registration methods depending on how you run Claude Code.**
-
-#### Option A: VSCode Extension (recommended)
-
-Edit `~/.claude.json` (your home directory — note: **not** `~/.claude/claude.json`) and add the `mcpServers` key:
-
-```json
-{
-  "mcpServers": {
-    "biomodels-rag": {
-      "type": "stdio",
-      "command": "/absolute/path/to/AntimonyRAG_Agent/venv/bin/python3",
-      "args": ["/absolute/path/to/AntimonyRAG_Agent/mcp_server.py"]
-    }
-  }
-}
-```
-
-Then reload the VSCode window: `Cmd+Shift+P` → **Developer: Reload Window**.
-
-Verify it connected: type `/mcp` in the Claude Code chat — `biomodels-rag` should appear as **Connected**.
-
-#### Option B: Claude Code CLI
-
 ```bash
-claude mcp add --transport stdio biomodels-rag -- \
-  /absolute/path/to/AntimonyRAG_Agent/venv/bin/python3 \
-  /absolute/path/to/AntimonyRAG_Agent/mcp_server.py
+venv/bin/python3 register_mcp.py
 ```
 
-Then restart the `claude` CLI session.
+This script finds your Claude Code config files automatically and adds the server entry with the correct absolute paths for your machine.
 
-> **Note:** The CLI writes to `~/.claude/claude.json`, which is a different file from `~/.claude.json` used by the VSCode extension. Each method only works for its respective client.
+**VSCode extension:** After running it, reload the window with `Cmd+Shift+P` → **Developer: Reload Window**, then type `/mcp` in the Claude Code chat — `biomodels-rag` should appear as **Connected**.
+
+**Claude CLI:** Restart your `claude` session.
+
+> **Manual registration:** If the script can't find your config, it will print the exact JSON to paste — follow the instructions it outputs.
 
 ## Design notes
 
@@ -125,4 +103,5 @@ https://www.ebi.ac.uk/biomodels/model/download/{model_id}?filename={model_id}_ur
 | `mcp_server.py` | The MCP server — the only file that runs |
 | `requirements.txt` | Dependencies: `mcp`, `tellurium`, `requests` |
 | `test_mcp.py` | Install verification — run this after `pip install` |
+| `register_mcp.py` | Auto-registers the server with Claude Code (VSCode + CLI) |
 | `requirements-full-pipeline.txt` | Dependencies for the original BioModelsRAG pipeline (reference only) |
