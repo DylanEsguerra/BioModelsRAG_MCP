@@ -1,0 +1,8 @@
+requests
+tellurium
+ollama
+langchain-text-splitters
+chromadb
+BioModelsRAG
+python-dotenv
+mcp
