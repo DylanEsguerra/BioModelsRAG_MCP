@@ -136,3 +136,25 @@ https://www.ebi.ac.uk/biomodels/model/download/{model_id}?filename={model_id}_ur
 | `test_mcp.py` | Install verification — run this after `pip install` |
 | `register_mcp.py` | Auto-registers the server with Claude Code (VSCode + CLI) |
 | `requirements-full-pipeline.txt` | Dependencies for the original BioModelsRAG pipeline (reference only) |
+
+## Credits and references
+
+This MCP server is a Claude Code integration layer built on top of the BioModelsRAG project:
+
+- **Paper:** Krishnan, B.N., Heydarabadipour, A., & Sauro, H. (2026). *BioModelsRAG: A Biological Modeling Assistant Using RAG (Retrieval Augmented Generation)*. arXiv:2601.22684 [q-bio.MN]. https://arxiv.org/abs/2601.22684
+- **Original repository:** https://github.com/TheBobBob/BioModelsRAG
+- **Documentation:** https://thebobbob.github.io/BioModelsRAG/
+- **BioModels database:** https://www.ebi.ac.uk/biomodels/
+- **Model metadata cache:** https://github.com/TheBobBob/BiomodelsCache
+
+```bibtex
+@misc{krishnan2026biomodelsragbiologicalmodelingassistant,
+  title={BioModelsRAG: A Biological Modeling Assistant Using RAG (Retrieval Augmented Generation)},
+  author={Bhavyahshree Navaneetha Krishnan and Adel Heydarabadipour and Herbert Sauro},
+  year={2026},
+  eprint={2601.22684},
+  archivePrefix={arXiv},
+  primaryClass={q-bio.MN},
+  url={https://arxiv.org/abs/2601.22684}
+}
+```
