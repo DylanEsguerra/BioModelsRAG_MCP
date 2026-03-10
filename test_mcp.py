@@ -41,6 +41,13 @@ def test_invalid_model():
     assert "Error" in result, "Expected error message for invalid model ID"
     print(f"  [{PASS}] get_model_antimony('BIOMD9999999999') — correctly returned error")
 
+def test_tellurium_simulate():
+    import tellurium as te
+    r = te.loada('S1 -> S2; k1*S1; k1 = 0.1; S1 = 10')
+    result = r.simulate(0, 50, 100)
+    assert result is not None and len(result) == 100, "Expected 100-row simulation result"
+    print(f"  [{PASS}] tellurium simulate — basic simulation works")
+
 if __name__ == "__main__":
     tests = [
         test_search,
@@ -48,6 +55,7 @@ if __name__ == "__main__":
         test_get_antimony,
         test_get_antimony_glycolysis,
         test_invalid_model,
+        test_tellurium_simulate,
     ]
 
     print("biomodels-rag MCP — install verification\n")

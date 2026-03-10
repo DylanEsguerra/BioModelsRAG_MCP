@@ -144,6 +144,22 @@ def get_model_antimony(model_id: str) -> str:
     asking questions about reactions, species, parameters, or generating
     Tellurium simulation scripts.
 
+    To simulate a model with Tellurium after retrieving the Antimony, use this pattern:
+
+        import tellurium as te
+        r = te.loada(antimony_string)
+        r.simulate(0, 100, 500)
+        r.plot()
+
+    For SBML-based loading (if loada fails due to boundary species):
+
+        import tellurium as te, requests, tempfile, os
+        url = f"https://www.ebi.ac.uk/biomodels/model/download/{model_id}?filename={model_id}_url.xml"
+        r = requests.get(url); tmp = tempfile.mktemp(suffix=".xml")
+        open(tmp, "wb").write(r.content)
+        model = te.loadSBMLModel(tmp); model.simulate(0, 100, 500); model.plot()
+        os.unlink(tmp)
+
     Args:
         model_id: BioModels ID (e.g. "BIOMD0000000064"). Use search_biomodels first
                   to find a valid ID.

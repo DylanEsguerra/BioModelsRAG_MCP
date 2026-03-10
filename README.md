@@ -13,16 +13,47 @@ Two tools are exposed to Claude:
 
 Claude receives the full Antimony text in its context window and can reason over reactions, species, parameters, and generate simulation code directly.
 
-## Example workflow in Claude Code
+## Example prompts for Claude Code
 
+Once the MCP is connected, paste any of these into the Claude Code chat:
+
+**Search and explore**
 ```
-Search biomodels for "glycolysis" and get the Antimony for one of them.
-Write a Tellurium simulation script and run it.
+Search BioModels for "glycolysis" and summarise which organisms are represented.
 ```
 
+**Reasoning over model structure** *(from the BioModelsRAG paper, using BIOMD0000000054)*
 ```
-If I increase the ion concentration in BIOMD0000000054, will ATP increase exponentially?
+Get the Antimony for BIOMD0000000054.
+If I increase the concentration of ions in the reaction between ions and the energy pool,
+will the output increase exponentially?
 ```
+```
+Get the Antimony for BIOMD0000000054.
+What is the identity of the cell compartment in this model?
+```
+```
+Get the Antimony for BIOMD0000000054.
+What is the assignment rule for ATP?
+```
+
+**Simulation**
+```
+Get the Antimony for BIOMD0000000054 and write a Tellurium script that
+simulates it for 200 hours and plots all species.
+```
+```
+Search for yeast glycolysis models and write a Tellurium simulation for the best one.
+```
+
+> **Tip:** To run a Tellurium simulation from Antimony, the basic pattern is:
+> ```python
+> import tellurium as te
+> r = te.loada(antimony_string)
+> r.simulate(0, 100, 500)
+> r.plot()
+> ```
+> Claude will generate the full script for you — just ask.
 
 ## Architecture
 
