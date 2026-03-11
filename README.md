@@ -113,6 +113,32 @@ This script finds your Claude Code config files automatically and adds the serve
 
 > **Manual registration:** If the script can't find your config, it will print the exact JSON to paste — follow the instructions it outputs.
 
+### Using with Claude Desktop
+
+Claude Desktop uses the same stdio transport. Open (or create) `~/Library/Application Support/Claude/claude_desktop_config.json` and add:
+
+```json
+{
+  "mcpServers": {
+    "biomodels-rag": {
+      "command": "/absolute/path/to/BioModelsRAG_MCP/venv/bin/python3",
+      "args": ["/absolute/path/to/BioModelsRAG_MCP/mcp_server.py"]
+    }
+  }
+}
+```
+
+Replace the paths with the actual location of your clone — you can get them by running:
+
+```bash
+echo "$(pwd)/venv/bin/python3"
+echo "$(pwd)/mcp_server.py"
+```
+
+Then **restart Claude Desktop**. The `search_biomodels` and `get_model_antimony` tools will appear automatically in your conversations.
+
+> **Other compatible clients:** Cursor, Windsurf, Zed, and Continue.dev all support stdio MCP servers using the same JSON config format.
+
 ## Design notes
 
 **Why no Ollama / ChromaDB?**

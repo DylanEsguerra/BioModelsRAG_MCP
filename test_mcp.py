@@ -9,37 +9,45 @@ Usage:
 import sys
 sys.path.insert(0, ".")
 
-from mcp_server import search_biomodels, get_model_antimony
+from mcp_server import biomodels_search, biomodels_get_antimony
 
 PASS = "PASS"
 FAIL = "FAIL"
 
 def test_search():
-    result = search_biomodels("glycolysis")
+    result = biomodels_search("glycolysis")
     assert "BIOMD" in result, "Expected at least one BIOMD model ID in search results"
     assert "Found" in result, "Expected result count in output"
-    print(f"  [{PASS}] search_biomodels('glycolysis') — returned results")
+    print(f"  [{PASS}] biomodels_search('glycolysis') — returned results")
 
 def test_search_specific():
-    result = search_biomodels("BIOMD0000000054")
+    result = biomodels_search("BIOMD0000000054")
     assert "Ataullahkhanov" in result, "Expected model name in result"
-    print(f"  [{PASS}] search_biomodels('BIOMD0000000054') — found known model")
+    print(f"  [{PASS}] biomodels_search('BIOMD0000000054') — found known model")
+
+def test_search_pagination():
+    page1 = biomodels_search("glycolysis", limit=5, offset=0)
+    page2 = biomodels_search("glycolysis", limit=5, offset=5)
+    assert "1–5" in page1, "Expected page 1 range in output"
+    assert "6–10" in page2, "Expected page 2 range in output"
+    assert page1 != page2, "Expected different results on different pages"
+    print(f"  [{PASS}] biomodels_search pagination — limit and offset work correctly")
 
 def test_get_antimony():
-    result = get_model_antimony("BIOMD0000000054")
+    result = biomodels_get_antimony("BIOMD0000000054")
     assert result.startswith("//"), f"Expected Antimony comment header, got: {result[:80]}"
     assert "U2: 3 I + E =>" in result, "Expected ion pump reaction in Antimony"
-    print(f"  [{PASS}] get_model_antimony('BIOMD0000000054') — returned valid Antimony")
+    print(f"  [{PASS}] biomodels_get_antimony('BIOMD0000000054') — returned valid Antimony")
 
 def test_get_antimony_glycolysis():
-    result = get_model_antimony("BIOMD0000000064")
+    result = biomodels_get_antimony("BIOMD0000000064")
     assert "Teusink" in result or "vGLK" in result, "Expected yeast glycolysis model content"
-    print(f"  [{PASS}] get_model_antimony('BIOMD0000000064') — returned yeast glycolysis model")
+    print(f"  [{PASS}] biomodels_get_antimony('BIOMD0000000064') — returned yeast glycolysis model")
 
 def test_invalid_model():
-    result = get_model_antimony("BIOMD9999999999")
+    result = biomodels_get_antimony("BIOMD9999999999")
     assert "Error" in result, "Expected error message for invalid model ID"
-    print(f"  [{PASS}] get_model_antimony('BIOMD9999999999') — correctly returned error")
+    print(f"  [{PASS}] biomodels_get_antimony('BIOMD9999999999') — correctly returned error")
 
 def test_tellurium_simulate():
     import tellurium as te
@@ -52,13 +60,14 @@ if __name__ == "__main__":
     tests = [
         test_search,
         test_search_specific,
+        test_search_pagination,
         test_get_antimony,
         test_get_antimony_glycolysis,
         test_invalid_model,
         test_tellurium_simulate,
     ]
 
-    print("biomodels-rag MCP — install verification\n")
+    print("biomodels_mcp — install verification\n")
     failures = []
     for test in tests:
         try:
