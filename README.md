@@ -46,6 +46,22 @@ simulates it for 200 hours and plots all species.
 Search for yeast glycolysis models and write a Tellurium simulation for the best one.
 ```
 
+## Example conversations
+
+These are real conversations showing what the MCP enables.
+
+### Without MCP vs. with MCP — same question, same model
+
+Both conversations ask the same question about BIOMD0000000054:
+> *"If I increase the concentration of ions in the reaction between ions and the energy pool, will the output increase exponentially?"*
+
+| | File | What happens |
+|---|---|---|
+| **Without MCP** | [Claude_Desktop_noMCP.md](examples/Claude_Desktop_noMCP.md) | Claude has no access to BioModels. It generates a plausible-looking but **hallucinated** Antimony model with wrong reactions and parameters, then reasons from that incorrect model. |
+| **With MCP** | [Claude_Desktop_MCP.md](examples/Claude_Desktop_MCP.md) | Claude calls `biomodels_get_antimony`, receives the actual curated model, identifies the correct reaction (`U2: 3 I + E => ; rate = W2 * I * T`), and gives an accurate answer grounded in the real kinetics. |
+
+This is the core value of the MCP: Claude's reasoning is only as good as the model it has access to.
+
 > **Tip:** To run a Tellurium simulation from Antimony, the basic pattern is:
 > ```python
 > import tellurium as te
@@ -115,29 +131,20 @@ This script finds your Claude Code config files automatically and adds the serve
 
 ### Using with Claude Desktop
 
-Claude Desktop uses the same stdio transport. Open (or create) `~/Library/Application Support/Claude/claude_desktop_config.json` and add:
+`register_mcp.py` handles Claude Desktop automatically — just run it and restart Claude Desktop. It detects all three clients (VSCode extension, CLI, Desktop) in one pass.
 
-```json
-{
-  "mcpServers": {
-    "biomodels-rag": {
-      "command": "/absolute/path/to/BioModelsRAG_MCP/venv/bin/python3",
-      "args": ["/absolute/path/to/BioModelsRAG_MCP/mcp_server.py"]
-    }
-  }
-}
-```
-
-Replace the paths with the actual location of your clone — you can get them by running:
-
-```bash
-echo "$(pwd)/venv/bin/python3"
-echo "$(pwd)/mcp_server.py"
-```
-
-Then **restart Claude Desktop**. The `search_biomodels` and `get_model_antimony` tools will appear automatically in your conversations.
-
-> **Other compatible clients:** Cursor, Windsurf, Zed, and Continue.dev all support stdio MCP servers using the same JSON config format.
+> **Other compatible clients:** Cursor, Windsurf, Zed, and Continue.dev all support stdio MCP servers. Add this to their config file:
+> ```json
+> {
+>   "mcpServers": {
+>     "biomodels-rag": {
+>       "command": "/path/to/clone/venv/bin/python3",
+>       "args": ["/path/to/clone/mcp_server.py"]
+>     }
+>   }
+> }
+> ```
+> Run `echo "$(pwd)/venv/bin/python3"` and `echo "$(pwd)/mcp_server.py"` to get your exact paths.
 
 ## Design notes
 
@@ -160,7 +167,7 @@ https://www.ebi.ac.uk/biomodels/model/download/{model_id}?filename={model_id}_ur
 | `mcp_server.py` | The MCP server — the only file that runs |
 | `requirements.txt` | Dependencies: `mcp`, `tellurium`, `requests` |
 | `test_mcp.py` | Install verification — run this after `pip install` |
-| `register_mcp.py` | Auto-registers the server with Claude Code (VSCode + CLI) |
+| `register_mcp.py` | Auto-registers with Claude Code (VSCode + CLI) and Claude Desktop |
 | `requirements-full-pipeline.txt` | Dependencies for the original BioModelsRAG pipeline (reference only) |
 
 ## Credits and references
