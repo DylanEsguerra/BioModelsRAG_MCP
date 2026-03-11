@@ -121,17 +121,35 @@ Both tools should return results. If this fails, fix it before proceeding.
 venv/bin/python3 register_mcp.py
 ```
 
-This script finds your Claude Code config files automatically and adds the server entry with the correct absolute paths for your machine.
+**What this script does:** It adds a `"biomodels-rag"` entry to your Claude client config files with the absolute paths to your local `venv/bin/python3` and `mcp_server.py`. It only edits JSON config files — it does not install anything, run any code, or make network requests. The change is reversible by removing the `"biomodels-rag"` key from the config.
+
+**Which files it modifies** (only the ones that already exist on your machine):
+
+| Client | Config file modified |
+|---|---|
+| Claude Code VSCode | `~/.claude.json` |
+| Claude Code CLI | `~/.claude/claude.json` |
+| Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+
+**Expected output:**
+```
+biomodels_mcp — registration
+
+  Claude Code (VSCode extension): adding entry
+  Claude Code (CLI): adding entry
+  Claude Desktop: adding entry        ← or "not installed" if you don't have it
+
+Done. Next steps:
+  Claude Code (VSCode extension): reload window with Cmd+Shift+P → 'Developer: Reload Window'...
+```
 
 **VSCode extension:** After running it, reload the window with `Cmd+Shift+P` → **Developer: Reload Window**, then type `/mcp` in the Claude Code chat — `biomodels-rag` should appear as **Connected**.
 
 **Claude CLI:** Restart your `claude` session.
 
+**Claude Desktop:** Quit and reopen Claude Desktop.
+
 > **Manual registration:** If the script can't find your config, it will print the exact JSON to paste — follow the instructions it outputs.
-
-### Using with Claude Desktop
-
-`register_mcp.py` handles Claude Desktop automatically — just run it and restart Claude Desktop. It detects all three clients (VSCode extension, CLI, Desktop) in one pass.
 
 > **Other compatible clients:** Cursor, Windsurf, Zed, and Continue.dev all support stdio MCP servers. Add this to their config file:
 > ```json
